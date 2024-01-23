@@ -31,15 +31,9 @@ async function run() {
         // Database collection 
         const userCollection = client.db('houseHunterDB').collection('users');
         const houseCollection = client.db('houseHunterDB').collection('homes');
+        const bookingCollection = client.db('houseHunterDB').collection('booked');
 
-        //API 
-
-        // home related API
-        app.get('/house', async(req, res) =>{
-            const result = await houseCollection.find().toArray();
-            res.send(result);
-        })
-
+        
 
         //JWT related API
         app.post('/jwt', async(req, res) => {
@@ -63,6 +57,25 @@ async function run() {
                 next();
             })
         }
+
+
+        //House related API 
+
+        // GET data from backend 
+        app.get('/house', async(req, res) =>{
+            const result = await houseCollection.find().toArray();
+            res.send(result);
+        })
+
+        // POST
+        app.post('/house', async (req, res)=>{
+            const addHouse = req.body;
+            console.log(addHouse);
+            const result = await houseCollection.insertOne(addHouse);
+            res.send(result);
+        })
+
+
 
         // User related API
         // POST operation for register 
@@ -99,8 +112,6 @@ async function run() {
 
             res.send({login: true, existingUser})
         })
-
-
 
 
 
