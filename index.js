@@ -40,6 +40,23 @@ async function run() {
             res.send(result);
         })
 
+        // User related API
+        // POST operation for register 
+        app.post('/newUser', async(req, res) =>{
+            const newUser = req.body;
+            const query = {email: newUser?.email};
+            const existingUser = await userCollection.findOne(query);
+            if(existingUser){
+                return res.send({massage:'The Email Exists', insertedId: null})
+            }
+            // console.log(newUser);
+            const result = await userCollection.insertOne(newUser);
+            res.send(result);
+        })
+
+
+
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 })
         console.log(
@@ -57,5 +74,5 @@ app.get("/", (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(` House Rental project is sitting on port.. ${port}`)
+    console.log(`House Rental project is sitting on port.. ${port}`)
 })
